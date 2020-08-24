@@ -1,8 +1,7 @@
 from faker import Faker
 fake = Faker()
 
-
-class business_card:
+class BusinessCard:
     def __init__(self, first_name, last_name, company, job, email):
         self.first_name = first_name
         self.last_name = last_name
@@ -14,19 +13,28 @@ class business_card:
         return f'{self.first_name}, {self.last_name},{self.company}, {self.job}, {self.email}'
 
     def __repr__(self):
-        return 'business_card(first_name: %s, last_name: %s, company: %s, job: %s, email: %s, phone_number: %s)' % (
+        return 'BusinessCard(first_name: %s, last_name: %s, company: %s, job: %s, email: %s, phone_number: %s)' % (
             self.first_name, self.last_name, self.company, self.job, self.email, self.phone_number)
 
-class BaseContact(business_card):
+class BaseContact(BusinessCard):
     def __init__(self, phone_number, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.phone_number = phone_number
+  
+    def __str__(self):
+        return 'first_name : {}, last_name : {}, company {}, job : {}, email :{}, phone_number : {}'\
+            .format(self.first_name, self.last_name, self.company, self.job, self.email, self.phone_number)
 
+#Zakomentowałem funkcje label_lenght, wydaje mi się, że jest prawidłowo napisana ale oczywiście 
+# mam problem: 'function' object has no attribute 'first_name'
+    
+    #def label_length_base(self):
+     #   lenght = lambda base : sum(len(int({self.first_name}, {self.last_name}))) 
+      #  return lenght
+    
+    #@label_length_base
     def contact(self):
         return f"Wybieram prywatny numer {self.phone_number} i dzwonię do {self.first_name} {self.last_name}."
-
-    def __str__(self):
-        return 'first_name : {}, last_name : {}, company {}, job : {}, email :{}, phone_number : {}'.format(self.first_name, self.last_name, self.company, self.job, self.email, self.phone_number)
 
 class BusinessContact(BaseContact):
     def __init__(self,phone_job, *args, **kwargs):
@@ -35,17 +43,13 @@ class BusinessContact(BaseContact):
 
     def contact(self):
         return f"Wybieram prywatny numer {self.phone_number} i dzwonię do {self.first_name} {self.last_name}."
-    def __str__(self):
-        return 'first_name :{}, last_name: {}, job : {}, company {}, phone_job {}'.format(self.first_name, self.last_name, self.job, self.company, self.phone_number)
+    
+    def label_length_business(self):
+        lenght = lambda BusinessContact : sum(len(f'{self.first_name}, {self.last_name}'))
+        return lenght 
 
-    @property
-    def count_letters(self):
-        return sum([len(self.first_name), len(self.last_name), 1])
-    @count_letters.setter
-    def count_letters(self, sum):
-        return sum([len(self.first_name), len(self.last_name), 1])
-
-base_card_list =[]
+#Funkcje drukowania list wizytówek
+base_contact_list =[]
 def base(copies):
     for contact in range (copies):
         contact = BaseContact(
@@ -56,14 +60,12 @@ def base(copies):
             phone_number=fake.phone_number(),
             email=fake.email()
         )
-        base_card_list.append(contact)
-        #print()
+        base_contact_list.append(contact)
         print((contact))
         print(contact.contact())
-        return base_card_list
+        return base_contact_list
         contact ()
 
-print("##############################")
 business_contact_list = []
 def business(copies):
     for contact in range (copies):
@@ -76,30 +78,27 @@ def business(copies):
             email=fake.email(),
         )
         business_contact_list.append(contact)
-        #print()
         print(contact)
         print(contact.contact)
         return business_contact_list
         contact()
-
-print("##############################")
 
 def create_contact():
     type = input("Jakiego rodzaju chcesz wizytówki? 1 = Business, 2 = Bazowe")
     copies = int(input("Ile chcesz wizytówek?:"))
     if type == "1":
         business(copies)
-        return copies
+        return copies 
     elif type == "2":
         base(copies)
-        return (copies)
+        return copies 
     else:
         print("error")
 
-##Program
+#Program
 if __name__ == "__main__":
     print("Hello")
-    print("Print >>>> a <<<< to create new contact cards:")
+    print("Print >>>a<<< to create new contact cards: ")
 
     choice = input("Enter your choice: ")
 
@@ -107,6 +106,7 @@ while True:
     if choice == "a":
         create_contact()
         continue
+
     else:
         error = "error"
         print(error)
