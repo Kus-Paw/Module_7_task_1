@@ -88,10 +88,10 @@ def create_contact():
     copies = int(input("Ile chcesz wizytówek?:"))
     if type == "1":
         business(copies)
-        return copies 
+        return 
     elif type == "2":
         base(copies)
-        return copies 
+        return 
     else:
         print("error")
 
