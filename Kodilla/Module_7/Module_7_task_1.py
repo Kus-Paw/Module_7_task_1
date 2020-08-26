@@ -1,4 +1,5 @@
 from faker import Faker
+
 fake = Faker()
 
 class BusinessCard:
@@ -9,6 +10,11 @@ class BusinessCard:
         self.job = job
         self.email = email
 
+    @property
+    def label_lenght(self):
+        return len(f"{self.first_name}, {self.last_name}")
+
+    @property
     def __str__(self):
         return f'{self.first_name}, {self.last_name},{self.company}, {self.job}, {self.email}'
 
@@ -20,38 +26,29 @@ class BaseContact(BusinessCard):
     def __init__(self, phone_number, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.phone_number = phone_number
-  
+
     def __str__(self):
-        return 'first_name : {}, last_name : {}, company {}, job : {}, email :{}, phone_number : {}'\
+        return 'first_name : {}, last_name : {}, company {}, job : {}, email :{}, phone_number : {}' \
             .format(self.first_name, self.last_name, self.company, self.job, self.email, self.phone_number)
 
-#Zakomentowałem funkcje label_lenght, wydaje mi się, że jest prawidłowo napisana ale oczywiście 
-# mam problem: 'function' object has no attribute 'first_name'
-    
-    #def label_length_base(self):
-     #   lenght = lambda base : sum(len(int({self.first_name}, {self.last_name}))) 
-      #  return lenght
-    
-    #@label_length_base
     def contact(self):
         return f"Wybieram prywatny numer {self.phone_number} i dzwonię do {self.first_name} {self.last_name}."
 
+
 class BusinessContact(BaseContact):
-    def __init__(self,phone_job, *args, **kwargs):
+    def __init__(self, phone_job, *args, **kwargs):
         super().__init__(phone_job, *args, **kwargs)
         self.phone_number = phone_job
 
     def contact(self):
         return f"Wybieram prywatny numer {self.phone_number} i dzwonię do {self.first_name} {self.last_name}."
-    
-    def label_length_business(self):
-        lenght = lambda BusinessContact : sum(len(f'{self.first_name}, {self.last_name}'))
-        return lenght 
 
-#Funkcje drukowania list wizytówek
-base_contact_list =[]
+
+# Funkcje drukowania list wizytówek
+
 def base(copies):
-    for contact in range (copies):
+    base_contact_list = []
+    for contact in range(copies):
         contact = BaseContact(
             first_name=fake.first_name(),
             last_name=fake.last_name(),
@@ -61,15 +58,13 @@ def base(copies):
             email=fake.email()
         )
         base_contact_list.append(contact)
-        print((contact))
-        print(contact.contact())
-        return base_contact_list
-        contact ()
+    return base_contact_list
 
-business_contact_list = []
+
 def business(copies):
-    for contact in range (copies):
-        contact = BusinessContact (
+    business_contact_list = []
+    for contact in range(copies):
+        contact = BusinessContact(
             first_name=fake.first_name(),
             last_name=fake.last_name(),
             company=fake.company(),
@@ -78,32 +73,37 @@ def business(copies):
             email=fake.email(),
         )
         business_contact_list.append(contact)
-        print(contact)
-        print(contact.contact)
-        return business_contact_list
-        contact()
+
+    return business_contact_list
 
 def create_contact():
-    type = input("Jakiego rodzaju chcesz wizytówki? 1 = Business, 2 = Bazowe")
-    copies = int(input("Ile chcesz wizytówek?:"))
+    type = input("Jakiego rodzaju chcesz wizytówki? 1 = Business, 2 = Bazowe: ")
+    copies = int(input("Ile chcesz wizytówek?: "))
     if type == "1":
-        business(copies)
-        return 
-    elif type == "2":
-        base(copies)
-        return 
-    else:
-        print("error")
+        contacts = business(copies)
+        print(business(copies))
+        print(len(contacts))
 
-#Program
+    elif type == "2":
+        contacts =  base(copies)
+        print(base(copies))
+        print(len(contacts))
+
+    else:
+        error = "error"
+        print(error)
+        exit()
+
+
+# Program
 if __name__ == "__main__":
     print("Hello")
-    print("Print >>>a<<< to create new contact cards: ")
+    print("Print Y/N to create new contact cards: ")
 
     choice = input("Enter your choice: ")
 
 while True:
-    if choice == "a":
+    if choice == "Y" or "y":
         create_contact()
         continue
 
