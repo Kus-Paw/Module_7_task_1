@@ -13,10 +13,10 @@ class Movies:
         self.year = year
         self.type = type
         #Variables
-        self.numbers_of_plays = numbers_of_plays
-
-    #def plays(self, step=1):
-     #   self.numbers_of_plays += step
+        self.numbers_of_plays = 0
+    @property
+    def plays(self, step=1):
+        self.numbers_of_plays += step
 
     def __str__(self):
         return f'{self.title}, {self.year},{self.type}, {self.numbers_of_plays}' # {self.episode_number}, {self.season_number}'
@@ -37,6 +37,15 @@ class Serials(Movies):
     def series_list(self):
         return f"{self.title} S{self.season_number}E{self.episode_number}"
 
+    def __eq__(self, other):
+        return (
+            self.title == other.title and
+            self.year == other.year and
+            self.type == other.type and
+            self.numbers_of_plays == other.numbers_of_plays and
+            self.season_number == other.season_number and
+            self.episode_number == other.episode_number
+        )
 
     def __repr__(self):
         return f'(title: %s, year: %s, type: %s, numbers_of_plays: %s, S%d, E{1:02d}%d )' % (
@@ -47,13 +56,12 @@ def base(copies):
     type_list = ["Comedy", "Action", "Thriller", "Horror", "Romance"]
     for movie_list in range (copies):
         video_list.append(Movies(
-            title=fake.last_name(),
-            year=fake.year(),
+            title= fake.last_name(),
+            year= fake.year(),
             type= random.choice(type_list),
-            numbers_of_plays= fake.random_int(0,10)
+            numbers_of_plays= Movies.plays
         ))
         video_list.append(movie_list)
-
     return video_list
 
 def series(copies):
@@ -65,33 +73,30 @@ def series(copies):
             type=random.choice(type_list),
             season_number=fake.random_int(1, 4),
             episode_number=fake.random_int(0, 20),
-            numbers_of_plays=fake.random_int(0, 10)
+            numbers_of_plays=Serials.plays
         ))
         video_list.append(series_list)
-
     return video_list
 
-
 # create another list to take out only movies - sorted
-def get_movies(video_list):
+def get_movies():
     movie_list = []
     for item in video_list:
-        if item.isMovies() == True:
+        if video_list == Movies:
             movie_list.append(item)
-    movie_list_by_title = sorted(movie_list, key=lambda item: item.title)
-
-    print("Lista poukładana alfabetycznie")
-    print(movie_list_by_title)
+        movie_list_by_title = sorted(movie_list, key=lambda item: item.title)
+        print("Lista poukładana alfabetycznie")
+        print(movie_list_by_title)
 
 #create another list to take out only series - sorted
 def get_series(video_list):
     series_list = []
     for item in video_list:
-        if item.isMovies() == False:
+        if video_list == Serials:
             series_list.append(item)
-    series_list_by_title = sorted(series_list, key=lambda item: item.title)
-    print("Lista poukładana alfabetycznie")
-    print(series_list_by_title)
+        series_list_by_title = sorted(series_list, key=lambda item: item.title)
+        print("Lista poukładana alfabetycznie")
+        print(series_list_by_title)
 
 
 def prepare_movies():
@@ -104,18 +109,18 @@ def prepare_movies():
     elif welcome == "2":
         print(series(copies))
     elif get_classic_movies == "Y" or "y" or "yes":
-            get_movies(video_list)
+        get_movies()
+        print()
     elif get_classic_movies == "N" or "n" or "no":
         print("Okey no problem")
     elif get_series_video == "Y" or "y" or "yes":
-            get_series(video_list)
+        get_series()
     elif get_series_video == "N" or "n" or "no":
         print("Okey no problem")
     else:
         error = "error"
         print(error)
         exit()
-
 
 ##Program
 if __name__ == "__main__":
@@ -127,8 +132,6 @@ if __name__ == "__main__":
     while True:
         if choice == "Y" or "y" or "yes":
             prepare_movies()
-            #generate_data()
-            #continue
         else:
             error = "error"
             print(error)
